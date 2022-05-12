@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-//go:embed app/build
+//go:embed template/build
 var embeddedFiles embed.FS
 
 func main() {
@@ -21,7 +21,7 @@ func getFileSystem() http.FileSystem {
 	// Get the build subdirectory as the
 	// root directory so that it can be passed
 	// to the http.FileServer
-	fsys, err := fs.Sub(embeddedFiles, "app/build")
+	fsys, err := fs.Sub(embeddedFiles, "template/build")
 	if err != nil {
 		panic(err)
 	}
