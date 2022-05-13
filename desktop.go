@@ -45,3 +45,33 @@ func main() {
 		panic(err)
 	}
 }
+
+func LoginBounce(user string, pass string, url string) string {
+	client := &http.Client{}
+	u := notificationmaildomain.User{User: user, Password: pass}
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(u)
+	req, err := http.NewRequest("POST", url+"login", b)
+	if err != nil {
+		//os.Exit(1)
+		fmt.Println("el error al generar req: ", err)
+
+	}
+
+	req.Header = http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		//os.Exit(1)
+		fmt.Println("el error al generar req: ", err)
+	}
+	defer resp.Body.Close()
+
+	var data notificationmaildomain.EmailSendApiLoginResponse
+	json.NewDecoder(resp.Body).Decode(&data)
+	fmt.Println(data.Token)
+
+	return data.Token
+}
